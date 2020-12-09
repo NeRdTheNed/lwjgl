@@ -84,8 +84,6 @@ public class Cursor {
 	 */
 	public Cursor(int width, int height, int xHotspot, int yHotspot, int numImages, IntBuffer images, IntBuffer delays) throws LWJGLException {
 		synchronized (OpenGLPackageAccess.global_lock) {
-			if ((getCapabilities() & CURSOR_ONE_BIT_TRANSPARENCY) == 0)
-				throw new LWJGLException("Native cursors not supported");
 			BufferChecks.checkBufferSize(images, width*height*numImages);
 			if (delays != null)
 				BufferChecks.checkBufferSize(delays, numImages);

@@ -65,24 +65,11 @@ final class AWTUtil {
 	}
 
 	public static int getNativeCursorCapabilities() {
-		if (LWJGLUtil.getPlatform() != LWJGLUtil.PLATFORM_MACOSX || LWJGLUtil.isMacOSXEqualsOrBetterThan(10, 4)) {
-			int cursor_colors = Toolkit.getDefaultToolkit().getMaximumCursorColors();
-			boolean supported = cursor_colors >= Short.MAX_VALUE && getMaxCursorSize() > 0;
-			int caps = supported ? org.lwjgl.input.Cursor.CURSOR_8_BIT_ALPHA | org.lwjgl.input.Cursor.CURSOR_ONE_BIT_TRANSPARENCY: 0 | org.lwjgl.input.Cursor.CURSOR_ANIMATION;
-			return caps;
-		} else {
-			/* Return no capability in Mac OS X 10.3 and earlier , as there are two unsolved bugs (both reported to apple along with
-			   minimal test case):
-			   1. When a custom cursor (or some standard) java.awt.Cursor is assigned to a
-			   Componennt, it is reset to the default pointer cursor when the window is de-
-			   activated and the re-activated. The Cursor can not be reset to the custom cursor,
-			   with another setCursor.
-			   2. When the cursor is moving in the top pixel row (y = 0 in AWT coordinates) in fullscreen
-			   mode, no mouse moved events are reported, even though mouse pressed/released and dragged
-			   events are reported
-			 */
-			return 0;
-		}
+		int cursor_colors = Toolkit.getDefaultToolkit().getMaximumCursorColors();
+		boolean supported = cursor_colors >= Short.MAX_VALUE && getMaxCursorSize() > 0;
+		int caps = supported ? org.lwjgl.input.Cursor.CURSOR_8_BIT_ALPHA | org.lwjgl.input.Cursor.CURSOR_ONE_BIT_TRANSPARENCY: 0 | org.lwjgl.input.Cursor.CURSOR_ANIMATION;
+		//LWJGLUtil.log("NeRd hacks: " + caps);
+		return caps;
 	}
 
 	public static Robot createRobot(final Component component) {
