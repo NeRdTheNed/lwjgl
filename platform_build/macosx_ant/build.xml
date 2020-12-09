@@ -14,10 +14,16 @@
 			<isset property="xcode-select.error" />
 		</condition>
 
-		<property name="sdk_path" value="Platforms/MacOSX.platform/Developer/SDKs"/>
-		<property name="jvm_headers_path" value="System/Library/Frameworks/JavaVM.framework/Versions/A/Headers"/>
+		<property name="sdk_path" value="SDKs"/>
+		<property name="jvm_headers_path" value="include"/>
 
 		<!-- Choose a JavaVM.framework -->
+		<condition property="javavmroot" value="/Library/Java/JavaVirtualMachines/graalvm-ee-java8-20.3.0/Contents/Home">
+			<and>
+				<not><isset property="javavmroot"/></not>
+				<available file="/Library/Java/JavaVirtualMachines/graalvm-ee-java8-20.3.0/Contents/Home" type="dir"/>
+			</and>
+		</condition>
 		<condition property="javavmroot" value="${developer_path}/${sdk_path}/MacOSX10.9.sdk">
 			<and>
 				<not><isset property="javavmroot"/></not>
@@ -52,6 +58,12 @@
 		<!-- Choose a MacOSX SDK -->
 		<property name="compiler" value="clang"/> <!-- Default to clang for 10.8 and up -->
 
+		<condition property="sdkroot" value="${developer_path}/${sdk_path}/MacOSX10.15.sdk">
+			<and>
+				<not><isset property="sdkroot"/></not>
+				<available file="${developer_path}/${sdk_path}/MacOSX10.15.sdk" type="dir"/>
+			</and>
+		</condition>
 		<condition property="sdkroot" value="${developer_path}/${sdk_path}/MacOSX10.9.sdk">
 			<and>
 				<not><isset property="sdkroot"/></not>
@@ -111,7 +123,7 @@
 
 	<target name="compile" depends="init">
 		<apply dir="${dstdir}" executable="${compiler}" os="Mac OS X" skipemptyfilesets="true" failonerror="true" dest="${dstdir}">
-			<arg line="${cflags} -ObjC -O2 -Wall -Wunused -c -fPIC -I${javavmroot}/${jvm_headers_path} -I${native}/common -I${native}/common/opengl -I${native}/macosx"/>
+			<arg line="${cflags} -ObjC -O2 -Wall -Wunused -c -fPIC -I${javavmroot}/${jvm_headers_path} -I${javavmroot}/${jvm_headers_path}/darwin -I${native}/common -I${native}/common/opengl -I${native}/macosx"/>
 			<!-- Map from *.m and *.c to .o -->
 			<mapper type="regexp" from="^(.*)\.(c|m)" to="\1.o"/>
 			<fileset dir="${native}/macosx" includes="*.m"/>
@@ -135,10 +147,6 @@
 		<apply dir="${objdir}" parallel="true" executable="${compiler}" os="Mac OS X" failonerror="true" skipemptyfilesets="true">
 			<arg line="${linkerflags} -exported_symbols_list ../lwjgl.symbols -dynamiclib -o ${libname} -framework Foundation -weak_framework AppKit -framework Carbon -framework OpenGL -framework QuartzCore -L${jdk_lib} -ljawt"/>
 			<fileset dir="${objdir}" includes="*.o"/>
-		</apply>
-		<apply dir="${objdir}" executable="strip" os="Mac OS X" failonerror="true">
-			<arg line="-S -X"/>
-			<fileset dir="." file="${libname}"/>
 		</apply>
 	</target>
 

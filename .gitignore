@@ -3,6 +3,7 @@
 /.classpath
 /.nbattrs
 /.project
+/applet
 /bin
 /dist
 /doc/javadoc
@@ -20,3 +21,4 @@
 
 nbproject/project.xml
 /nbproject/private/
+*.DS_Store

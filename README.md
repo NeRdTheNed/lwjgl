@@ -1,3 +1,6 @@
+WIP fixes being worked through. Don't use this, it will only work on my computer! Original README below.
+======
+
 [LEGACY] LWJGL - Lightweight Java Game Library
 ======
 

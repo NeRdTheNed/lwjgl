@@ -53,10 +53,10 @@ JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_MacOSXCanvasPeerInfo_nInitHandle
 	
 	MacOSXPeerInfo *peer_info = (MacOSXPeerInfo *)(*env)->GetDirectBufferAddress(env, peer_info_handle);
 	AWTSurfaceLock *surface = (AWTSurfaceLock *)(*env)->GetDirectBufferAddress(env, lock_buffer_handle);
-	JAWT_MacOSXDrawingSurfaceInfo *macosx_dsi = (JAWT_MacOSXDrawingSurfaceInfo *)surface->dsi->platformInfo;
+	JAWT_DrawingSurfaceInfo *macosx_dsi = (JAWT_DrawingSurfaceInfo *)surface->dsi->platformInfo;
 	
 	// force CALayer usage or check if CALayer is supported (i.e. on Java 5 and Java 6)
-	if(forceCALayer || (surface->awt.version & 0x80000000)) { //JAWT_MACOSX_USE_CALAYER) {
+	if((forceCALayer = true) || (surface->awt.version & 0x80000000)) { //JAWT_MACOSX_USE_CALAYER) {
 		
 		if (macosx_dsi != NULL) {
 			
@@ -95,7 +95,7 @@ JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_MacOSXCanvasPeerInfo_nInitHandle
 	}
 	
 	// no CALayer support, fallback to using legacy method of getting the NSView of an AWT Canvas
-	peer_info->parent = macosx_dsi->cocoaViewRef;
+	//peer_info->parent = macosx_dsi->cocoaViewRef; // F1X TH1S
 	peer_info->isCALayer = false;
 	peer_info->isWindowed = true;
 	
