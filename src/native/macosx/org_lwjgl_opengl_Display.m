@@ -619,12 +619,12 @@ JNIEXPORT jint JNICALL Java_org_lwjgl_opengl_MacOSXDisplay_nGetHeight(JNIEnv *en
 JNIEXPORT void JNICALL Java_org_lwjgl_opengl_MacOSXDisplay_nSetResizable(JNIEnv *env, jobject this, jobject window_handle, jboolean resizable) {
 	MacOSXWindowInfo *window_info = (MacOSXWindowInfo *)(*env)->GetDirectBufferAddress(env, window_handle);
 	NSUInteger style_mask = [window_info->window styleMask];
-	if (resizable == true) {
+	/*if (resizable == true) {
 		style_mask |= NSResizableWindowMask;
 	} else {
 		style_mask &= ~NSResizableWindowMask;
-	}
-	[window_info->window setStyleMask:style_mask];
+	}*/
+	//[window_info->window setStyleMask:style_mask];
 
 	if (window_info->enableFullscreenModeAPI) {
 		if (resizable) {
