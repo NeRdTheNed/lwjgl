@@ -624,7 +624,7 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_MacOSXDisplay_nSetResizable(JNIEnv 
 	} else {
 		style_mask &= ~NSResizableWindowMask;
 	}
-	//[window_info->window setStyleMask:style_mask];
+	[window_info->window performSelectorOnMainThread:@selector(setStyleMask:) withObject:style_mask waitUntilDone:YES];
 
 	if (window_info->enableFullscreenModeAPI) {
 		if (resizable) {
